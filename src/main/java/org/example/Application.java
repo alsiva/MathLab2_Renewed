@@ -9,7 +9,6 @@ public class Application {
 
     public static void main(String[] args) {
         new Application().run();
-        new Graphic().run();
     }
 
     private void run() {
@@ -64,7 +63,7 @@ public class Application {
         System.out.print("Write b = ");
         double b = scanner.nextDouble();
 
-        Graphic.setData(0, equations);
+        Graphic graphic = new Graphic(equation);
 
         //Метод половинного деления
         System.out.println("Bisection method solution");
@@ -80,6 +79,7 @@ public class Application {
         System.out.println("Δx = " + iterationResult[1]);
         System.out.println("iters = " + iterationResult[2]);
 
+        graphic.run();
     }
 
     private void systemOfEquations() {
@@ -95,8 +95,8 @@ public class Application {
         double accuracy = readAccuracy();
         EquationSolver solver = new EquationSolver(accuracy);
 
-//        Graphic graphic = new Graphic(1, system);
-//        Graphic.setData(1, system);
+        Graphic graphic = new Graphic(mathSystem);
+
 
         System.out.println("Newton method solution");
         Object[][] newtonResult = solver.solveByNewton(0.5, 0.5, mathSystem.getXFunction() , mathSystem.getYFunction());
@@ -106,7 +106,7 @@ public class Application {
         System.out.println("Δy = " + newtonResult[1][1]);
         System.out.println("iters = " + newtonResult[2][0]);
 
-//        graphic.run()
+        graphic.run();
     }
 
     private String readFromConsole() {

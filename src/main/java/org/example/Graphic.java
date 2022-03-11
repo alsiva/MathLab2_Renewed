@@ -7,24 +7,31 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
+import org.example.MathStuff.Equation;
 import org.example.MathStuff.Math;
+import org.example.MathStuff.MathSystem;
 
 public class Graphic extends Application {
-
-
-    // todo: initialize using constructor
-    private static int type, problem = 0;
 
     @FXML
     public LineChart lineChart;
 
-    public static void setData(int type, int problem) {
-        Graphic.type = type;
-        Graphic.problem = problem;
-    }
+    private boolean type;
+    private Equation equation;
+    private MathSystem mathSystem;
 
     public void run() {
         launch();
+    }
+
+
+
+
+    public Graphic(Equation equation) {
+        this.equation = equation;
+    }
+    public Graphic(MathSystem mathSystem) {
+        this.mathSystem = mathSystem;
     }
 
     @Override
@@ -37,8 +44,12 @@ public class Graphic extends Application {
 
         Scene scene  = new Scene(lineChart, 900, 600);
 
-        if (Graphic.type == 0) drawFirstType();
-        if (Graphic.type == 1) drawSecondType();
+        if (!this.type) {
+            drawEquation(equation);
+        } else {
+            drawNonLinearSystems(mathSystem);
+        }
+
 
         stage.setScene(scene);
         stage.show();
@@ -46,38 +57,26 @@ public class Graphic extends Application {
     }
 
 
-    private void drawFirstType() {
-        for (int i = 0; i < Math.EQUATIONS[Graphic.problem].length; i++) {
-            XYChart.Series<Double, Double> mainFunction = new XYChart.Series<>();
-
-            mainFunction.setData();
-
-            //series.setName(Math.GRAPHS[Graphic.problem][i]);
-
-            lineChart.setCreateSymbols(false);
-            lineChart.getData().add(series);
-
-            for (double point = -10; point <= 10; point += 0.01) {
-                series.getData().add(new XYChart.Data<>(point, Math.EQUATIONS[Graphic.problem][i].apply(point)));
-            }
-        }
+    private void drawEquation(Equation equation) {
+        drawFunction(equation.getFunction());
+        drawFunction(equation.getPhiFunction());
+        drawFunction(equation.getX());
     }
 
-    private void drawSecondType() {
-        for (int i = 2; i < Math.SYSTEMS[Graphic.problem].length; i++) {
-            XYChart.Series<Double, Double> series = new XYChart.Series<>();
-
-            series.setName(Math.GRAPH[Graphic.problem][i-2]);
-
-            lineChart.setCreateSymbols(false);
-            lineChart.getData().add(series);
-
-            for (double point = -10; point <= 10; point += 0.01) {
-                series.getData().add(new XYChart.Data<>(point, Math.SYSTEMS[Graphic.problem][i].apply(point)));
-            }
+    private void drawFunction(Function function) {
+        XYChart.Series<Double, Double> series = new XYChart.Series<>();
+        series.setName("y=" + function.toString());
+        for (double point = -10; point <= 10; point += 0.01) {
+            series.getData().add(new XYChart.Data<>(point, equation.getFunction().apply(point)));
         }
+        lineChart.setCreateSymbols(false);
+        lineChart.getData().add(series);
     }
 
 
+    private void drawNonLinearSystems(MathSystem mathSystem) {
+        drawFunction(mathSystem.getXFunctionRounded());
+        drawFunction(mathSystem.getYFunctionRounded());
+    }
 
 }

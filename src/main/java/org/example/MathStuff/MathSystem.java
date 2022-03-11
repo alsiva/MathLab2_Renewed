@@ -24,6 +24,14 @@ public class MathSystem {
         return this.yFunction;
     }
 
+    public Function getXFunctionRounded() {
+        return this.xFunctionRounded;
+    }
+
+    public Function getYFunctionRounded() {
+        return this.yFunctionRounded;
+    }
+
     public String getXFunctionAsString() {
         return this.xFunction.toString();
     }

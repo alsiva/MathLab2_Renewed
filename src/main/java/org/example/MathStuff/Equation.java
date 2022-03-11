@@ -25,4 +25,7 @@ public class Equation {
     public Function getPhiFunction() {
         return this.phiFunction;
     }
+
+    public Function getX() { return this.x; }
+
 }
