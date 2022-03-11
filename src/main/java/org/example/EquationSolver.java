@@ -2,15 +2,13 @@ package org.example;
 import java.lang.Math;
 
 public class EquationSolver {
+    private final double accuracy;
 
-    private double accuracy = 1E-5;
-    private final int limit = 1000000; //1.000.000
-
-    public void setAccuracy(double accuracy) {
-        if (!(0 < accuracy && accuracy < 1)) {
-            throw new IllegalArgumentException("Accuracy should be in [0, 1]");
-        }
+    public EquationSolver(double accuracy) {
+        this.accuracy = accuracy;
     }
+
+    private final int limit = 1000000; //1.000.000
 
     private double deltaX(Function[] func, double x, double y) {
         return func[0].apply(x, y) * func[1].derivativeByY(x, y, 1e-9) - func[1].apply(x, y) * func[0].derivativeByY(x, y, 1e-9);

@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 public class Graphic extends Application {
 
 
+    // todo: initialize using constructor
     private static int type, problem = 0;
 
     @FXML

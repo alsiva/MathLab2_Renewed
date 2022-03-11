@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Application {
-
     private final static Scanner scanner = new Scanner(System.in);
 
     private final EquationSolver solver = new EquationSolver();
@@ -30,7 +29,7 @@ public class Application {
         }
     }
 
-    private void setAccuracy() {
+    private double readAccuracy() {
         while (true) {
             System.out.println("Set accuracy in interval [0, 1]");
 
@@ -39,8 +38,7 @@ public class Application {
                 double accuracy = Double.parseDouble(input);
 
                 if (0 <= accuracy && accuracy <= 1) {
-                    solver.setAccuracy(accuracy);
-                    break;
+                    return accuracy;
                 }
             } catch (NumberFormatException e) {
                 System.err.println("Wrong format");
@@ -130,6 +128,8 @@ public class Application {
         System.out.println("y = " + newtonResult[1][0]);
         System.out.println("Δy = " + newtonResult[1][1]);
         System.out.println("iters = " + newtonResult[2][0]);
+
+//        graphic.run()
     }
 
     private String readFromConsole() {
