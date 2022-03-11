@@ -7,6 +7,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
+import org.example.MathStuff.Math;
 
 public class Graphic extends Application {
 
@@ -47,9 +48,11 @@ public class Graphic extends Application {
 
     private void drawFirstType() {
         for (int i = 0; i < Math.EQUATIONS[Graphic.problem].length; i++) {
-            XYChart.Series<Double, Double> series = new XYChart.Series<>();
+            XYChart.Series<Double, Double> mainFunction = new XYChart.Series<>();
 
-            series.setName(Math.GRAPHS[Graphic.problem][i]);
+            mainFunction.setData();
+
+            //series.setName(Math.GRAPHS[Graphic.problem][i]);
 
             lineChart.setCreateSymbols(false);
             lineChart.getData().add(series);

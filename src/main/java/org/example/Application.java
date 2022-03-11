@@ -1,12 +1,11 @@
 package org.example;
-
-import java.util.Arrays;
+import org.example.MathStuff.Equation;
+import org.example.MathStuff.Math;
+import org.example.MathStuff.MathSystem;
 import java.util.Scanner;
 
 public class Application {
     private final static Scanner scanner = new Scanner(System.in);
-
-    private final EquationSolver solver = new EquationSolver();
 
     public static void main(String[] args) {
         new Application().run();
@@ -49,34 +48,16 @@ public class Application {
     }
 
     private void nonLinearEquation() {
-
-        System.out.println("Write a or b");
-        System.out.println("[a] " + Arrays.toString(Math.EQUATION_A));
-        System.out.println("[b] " + Arrays.toString(Math.EQUATION_B);
-        System.out.println("[c] " + Arrays.toString(Math.EQUATION_C));
-        System.out.println("[d] " + Arrays.toString(Math.EQUATION_D);
-
-        //todo rewrite to while true
-        switch (readFromConsole()) {
-            case "a":
-                solveNonLinearEquation(Math.EQUATION_A);
-                break;
-            case "b":
-                solveNonLinearEquation(1);
-                break;
-            case "c":
-                solveNonLinearEquation(2);
-                break;
-            case "d":
-                solveNonLinearEquation(3);
-                break;
-            default:
-                throw new RuntimeException("You should select a, b, c, d");
-        }
+        Math.writeEquationsChoice();
+        int index = scanner.nextInt();
+        //todo handleException or rewrite that way you couldn't choose wrong index
+        Equation equation = Math.chooseEquation(index);
+        solveNonLinearEquation(equation);
     }
 
-    private void solveNonLinearEquation(Function[] functions) {
-        setAccuracy();
+    private void solveNonLinearEquation(Equation equation) {
+        double accuracy = readAccuracy();
+        EquationSolver solver = new EquationSolver(accuracy);
 
         System.out.print("Write a = ");
         double a = scanner.nextDouble();
@@ -87,14 +68,14 @@ public class Application {
 
         //Метод половинного деления
         System.out.println("Bisection method solution");
-        Object[] bisectionResult = solver.solveByBisection(functions[0], a, b);
+        Object[] bisectionResult = solver.solveByBisection(equation.getFunction(), a, b);
         System.out.println("x = " + bisectionResult[0]);
         System.out.println("Δx = " + bisectionResult[1]);
         System.out.println("iters = " + bisectionResult[2]);
 
         //Метод итераций
         System.out.println("Iteration method solution");
-        Object[] iterationResult = solver.solveByIteration(functions[1], a, b);
+        Object[] iterationResult = solver.solveByIteration(equation.getPhiFunction(), a, b);
         System.out.println("x = " + iterationResult[0]);
         System.out.println("Δx = " + iterationResult[1]);
         System.out.println("iters = " + iterationResult[2]);
@@ -102,27 +83,23 @@ public class Application {
     }
 
     private void systemOfEquations() {
-        System.out.println("[a]" + Math.SYSTEM[0][0] + " :::::: " + Math.SYSTEM[0][1]);
-        System.out.println("[b]" + Math.SYSTEM[1][0] + " :::::: " + Math.SYSTEM[1][1]);
 
-        switch (readFromConsole()) {
-            case "a": solveSystemOfEquations(0);
-                break;
-            case "b": solveSystemOfEquations(1);
-                break;
-            default: throw new RuntimeException();
-        }
+        Math.writeSystemsChoice();
+        int index = scanner.nextInt();
+        MathSystem mathSystem = Math.chooseSystem(index);
+        solveSystemOfEquations(mathSystem);
+
     }
 
-    private void solveSystemOfEquations(int system) {
-        Function[] systems = Math.SYSTEMS[system];
+    private void solveSystemOfEquations(MathSystem mathSystem) {
+        double accuracy = readAccuracy();
+        EquationSolver solver = new EquationSolver(accuracy);
 
-        setAccuracy();
-
-        Graphic.setData(1, system);
+//        Graphic graphic = new Graphic(1, system);
+//        Graphic.setData(1, system);
 
         System.out.println("Newton method solution");
-        Object[][] newtonResult = solver.solveByNewton(0.5, 0.5, systems[0], systems[1]);
+        Object[][] newtonResult = solver.solveByNewton(0.5, 0.5, mathSystem.getXFunction() , mathSystem.getYFunction());
         System.out.println("x = " + newtonResult[0][0]);
         System.out.println("Δx = " + newtonResult[0][1]);
         System.out.println("y = " + newtonResult[1][0]);
