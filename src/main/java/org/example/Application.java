@@ -1,6 +1,10 @@
 package org.example;
-import org.example.GraphicStuff.EquationGraphic;
-import org.example.GraphicStuff.SystemGraphic;
+import javafx.fxml.FXML;
+import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.stage.Stage;
 import org.example.MathStuff.Equation;
 import org.example.MathStuff.Math;
 import org.example.MathStuff.MathSystem;
@@ -8,14 +12,13 @@ import org.example.MathStuff.MathSystem;
 import java.util.Locale;
 import java.util.Scanner;
 
-public class Application {
+public class Application extends javafx.application.Application {
+    private static Equation equation;
+    private static MathSystem mathSystem;
+
     private final static Scanner scanner = new Scanner(System.in).useLocale(Locale.US);
 
     public static void main(String[] args) {
-        new Application().run();
-    }
-
-    private void run() {
         System.out.println("Nonlinear equation [1]");
         System.out.println("System of nonlinear equation [2]");
 
@@ -29,9 +32,11 @@ public class Application {
             default:
                 throw new RuntimeException("You should choose either 1 or 2");
         }
+
+        launch(args);
     }
 
-    private double readAccuracy() {
+    private static double readAccuracy() {
         while (true) {
             System.out.println("Set accuracy in interval [0, 1]");
 
@@ -50,7 +55,7 @@ public class Application {
         }
     }
 
-    private void nonLinearEquation() {
+    private static void nonLinearEquation() {
         Math.writeEquationsChoice();
         int index = scanner.nextInt();
         scanner.nextLine();
@@ -59,7 +64,7 @@ public class Application {
         solveNonLinearEquation(equation);
     }
 
-    private void solveNonLinearEquation(Equation equation) {
+    private static void solveNonLinearEquation(Equation equation) {
         double accuracy = readAccuracy();
         EquationSolver solver = new EquationSolver(accuracy);
 
@@ -69,7 +74,6 @@ public class Application {
         System.out.print("Write b = ");
         double b = scanner.nextDouble();
 
-        EquationGraphic equationGraphic = new EquationGraphic(equation);
 
         //Метод половинного деления
         System.out.println("Bisection method solution");
@@ -87,22 +91,21 @@ public class Application {
         System.out.println("Δx = " + iterationResult[1]);
         System.out.println("iters = " + iterationResult[2]);
 
-        equationGraphic.run();
+        Application.equation = equation;
     }
 
-    private void systemOfEquations() {
+    private static void systemOfEquations() {
         Math.writeSystemsChoice();
         int index = scanner.nextInt();
         MathSystem mathSystem = Math.chooseSystem(index-1);
         solveSystemOfEquations(mathSystem);
     }
 
-    private void solveSystemOfEquations(MathSystem mathSystem) {
+    private static void solveSystemOfEquations(MathSystem mathSystem) {
         double accuracy = readAccuracy();
         EquationSolver solver = new EquationSolver(accuracy);
 
-
-        SystemGraphic systemGraphic = new SystemGraphic(mathSystem);
+        Application.mathSystem = mathSystem;
 
         System.out.println("Newton method solution");
         Object[][] newtonResult = solver.solveByNewton(0.5, 0.5, mathSystem.getXFunction() , mathSystem.getYFunction());
@@ -111,11 +114,46 @@ public class Application {
         System.out.println("y = " + newtonResult[1][0]);
         System.out.println("Δy = " + newtonResult[1][1]);
         System.out.println("iters = " + newtonResult[2][0]);
-
-        systemGraphic.run();
     }
 
-    private String readFromConsole() {
+    private static String readFromConsole() {
         return scanner.nextLine().trim().toLowerCase();
+    }
+
+    @FXML
+    public LineChart<Number, Number> lineChart;
+
+    @Override
+    public void start(Stage stage) {
+        lineChart = new LineChart<>(
+            new NumberAxis(-10, 10, 2),
+            new NumberAxis(-10, 10, 2)
+        );
+
+        Scene scene  = new Scene(lineChart, 900, 600);
+
+        if (equation != null) {
+            drawFunction(equation.getFunction());
+            drawFunction(equation.getPhiFunction());
+            drawFunction(equation.getX());
+        } else {
+            drawFunction(mathSystem.getXFunctionRounded());
+            drawFunction(mathSystem.getYFunctionRounded());
+        }
+
+        stage.setScene(scene);
+        stage.show();
+    }
+
+
+
+    protected void drawFunction(Function function) {
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+        series.setName("y=" + function.toString());
+        for (double point = -10; point <= 10; point += 0.01) {
+            series.getData().add(new XYChart.Data<Number, Number>(point, function.apply(point)));
+        }
+        lineChart.setCreateSymbols(false);
+        lineChart.getData().add(series);
     }
 }
