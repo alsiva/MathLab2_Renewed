@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import org.example.MathStuff.Equation;
 import org.example.MathStuff.Math;
 import org.example.MathStuff.MathSystem;
+import org.example.SolverStuff.EquationSolver;
 
 import java.util.Locale;
 import java.util.Scanner;

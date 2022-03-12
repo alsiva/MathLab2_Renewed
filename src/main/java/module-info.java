@@ -7,6 +7,6 @@ module org.example {
     exports org.example;
     exports org.example.MathStuff;
     opens org.example.MathStuff to javafx.fxml;
-    exports org.example.GraphicStuff;
-    opens org.example.GraphicStuff to javafx.fxml;
+    exports org.example.SolverStuff;
+    opens org.example.SolverStuff to javafx.fxml;
 }

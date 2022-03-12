@@ -1,4 +1,6 @@
-package org.example;
+package org.example.SolverStuff;
+import org.example.Function;
+
 import java.lang.Math;
 
 public class EquationSolver {
