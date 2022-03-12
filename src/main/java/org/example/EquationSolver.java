@@ -45,6 +45,7 @@ public class EquationSolver {
     }
 
     public Object[] solveByIteration(Function function, double a, double b) {
+
         if (a > b) {
             double change = a;
             a = b;

@@ -1,7 +1,11 @@
 package org.example;
+import org.example.GraphicStuff.EquationGraphic;
+import org.example.GraphicStuff.SystemGraphic;
 import org.example.MathStuff.Equation;
 import org.example.MathStuff.Math;
 import org.example.MathStuff.MathSystem;
+
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Application {
@@ -51,7 +55,7 @@ public class Application {
         int index = scanner.nextInt();
         scanner.nextLine();
         //todo handleException or rewrite that way you couldn't choose wrong index
-        Equation equation = Math.chooseEquation(index);
+        Equation equation = Math.chooseEquation(index-1);
         solveNonLinearEquation(equation);
     }
 
@@ -65,7 +69,7 @@ public class Application {
         System.out.print("Write b = ");
         double b = scanner.nextDouble();
 
-        Graphic graphic = new Graphic(equation);
+        EquationGraphic equationGraphic = new EquationGraphic(equation);
 
         //Метод половинного деления
         System.out.println("Bisection method solution");
@@ -74,6 +78,8 @@ public class Application {
         System.out.println("Δx = " + bisectionResult[1]);
         System.out.println("iters = " + bisectionResult[2]);
 
+        System.out.println("--------------------------------------");
+
         //Метод итераций
         System.out.println("Iteration method solution");
         Object[] iterationResult = solver.solveByIteration(equation.getPhiFunction(), a, b);
@@ -81,13 +87,13 @@ public class Application {
         System.out.println("Δx = " + iterationResult[1]);
         System.out.println("iters = " + iterationResult[2]);
 
-        graphic.run();
+        equationGraphic.run();
     }
 
     private void systemOfEquations() {
         Math.writeSystemsChoice();
         int index = scanner.nextInt();
-        MathSystem mathSystem = Math.chooseSystem(index);
+        MathSystem mathSystem = Math.chooseSystem(index-1);
         solveSystemOfEquations(mathSystem);
     }
 
@@ -95,8 +101,8 @@ public class Application {
         double accuracy = readAccuracy();
         EquationSolver solver = new EquationSolver(accuracy);
 
-        Graphic graphic = new Graphic(mathSystem);
 
+        SystemGraphic systemGraphic = new SystemGraphic(mathSystem);
 
         System.out.println("Newton method solution");
         Object[][] newtonResult = solver.solveByNewton(0.5, 0.5, mathSystem.getXFunction() , mathSystem.getYFunction());
@@ -106,7 +112,7 @@ public class Application {
         System.out.println("Δy = " + newtonResult[1][1]);
         System.out.println("iters = " + newtonResult[2][0]);
 
-        graphic.run();
+        systemGraphic.run();
     }
 
     private String readFromConsole() {
