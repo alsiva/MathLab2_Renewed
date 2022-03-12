@@ -18,6 +18,7 @@ public class Math {
 
     public static void writeEquationsChoice() {
         System.out.println("Choose the equation from 1 to " + EQUATIONS.size());
+
         for (int i = 0; i < EQUATIONS.size(); i++) {
             System.out.println("[" + (i+1) + "]: " + EQUATIONS.get(i).getFunctionAsString());
         }

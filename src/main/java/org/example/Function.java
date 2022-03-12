@@ -7,8 +7,10 @@ import net.objecthunter.exp4j.ExpressionBuilder;
 public class Function {
 
     private final Expression expression;
+    private final String function;
 
     public Function(String function) {
+        this.function = function;
         this.expression = new ExpressionBuilder(function)
             .variables("x", "y")
             .build();
@@ -16,7 +18,7 @@ public class Function {
 
     @Override
     public String toString() {
-        return this.expression.toString();
+        return this.function;
     }
 
     //Solve knowing x

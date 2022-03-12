@@ -5,7 +5,7 @@ import org.example.MathStuff.MathSystem;
 import java.util.Scanner;
 
 public class Application {
-    private final static Scanner scanner = new Scanner(System.in);
+    private final static Scanner scanner = new Scanner(System.in).useLocale(Locale.US);
 
     public static void main(String[] args) {
         new Application().run();
@@ -49,6 +49,7 @@ public class Application {
     private void nonLinearEquation() {
         Math.writeEquationsChoice();
         int index = scanner.nextInt();
+        scanner.nextLine();
         //todo handleException or rewrite that way you couldn't choose wrong index
         Equation equation = Math.chooseEquation(index);
         solveNonLinearEquation(equation);
@@ -60,6 +61,7 @@ public class Application {
 
         System.out.print("Write a = ");
         double a = scanner.nextDouble();
+
         System.out.print("Write b = ");
         double b = scanner.nextDouble();
 
@@ -83,12 +85,10 @@ public class Application {
     }
 
     private void systemOfEquations() {
-
         Math.writeSystemsChoice();
         int index = scanner.nextInt();
         MathSystem mathSystem = Math.chooseSystem(index);
         solveSystemOfEquations(mathSystem);
-
     }
 
     private void solveSystemOfEquations(MathSystem mathSystem) {
@@ -112,5 +112,4 @@ public class Application {
     private String readFromConsole() {
         return scanner.nextLine().trim().toLowerCase();
     }
-
 }
