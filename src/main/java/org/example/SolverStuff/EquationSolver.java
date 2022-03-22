@@ -46,7 +46,7 @@ public class EquationSolver {
         return new Object[][] {{x, x - prevX}, {y, y - prevY}, {iterations}};
     }
 
-    public Object[] solveByIteration(Function function, double a, double b) {
+    public Object[] iterationRenewed(Function function, double a, double b) {
 
         if (a > b) {
             double change = a;
@@ -54,27 +54,40 @@ public class EquationSolver {
             b = change;
         }
 
+        System.out.println("---Phi functions");
+        System.out.println("Phi(a) = " + function.apply(a));
+        System.out.println("Phi(b) = " + function.apply(b));
+        System.out.println("----------------");
         double q = derivativeSeriesMax(function, a, b);
-        if (Double.isNaN(q) || q >= 1) {
-            throw new RuntimeException("Necessary condition for the convergence is not satisfied");
+
+        if (function.apply(a) * function.apply(b) > 0) {
+            throw new RuntimeException("Condition f(a) * f(b) < 0 is not satisfied");
         }
 
-        int iterations = 0;
-        double delta;
-        double k = (1 - q) / q;
-        double prev, root = (a + b) / 2;
+        double lambda =  -1/q;
+        double x;
+        double prevX;
+        double iterations = 0;
+        double delta = 0;
 
-        do {
-            prev = root; root = function.apply(root);
-            delta = root > prev ? root - prev : prev - root;
-            iterations++;
-        } while (delta > k * accuracy && iterations < limit);
 
-        if (iterations == limit) {
-            throw new RuntimeException("Specified accuracy is not achieved");
+
+        if (function.derivative(a, 1e-9) > function.derivative(b, 1e-9)) {
+            x = a;
+        } else {
+            x = b;
         }
 
-        return new Object[] { root, delta / k, iterations };
+
+        while (Math.abs(function.apply(x)) > accuracy) {
+            prevX = x;
+            iterations += 1;
+            x += lambda * function.apply(x);
+            delta = x > prevX ? x - prevX : prevX - x;
+        }
+
+        return new Object[] { x, delta, iterations };
+
     }
 
     private double derivativeSeriesMax(Function function, double a, double b) {

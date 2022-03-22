@@ -7,7 +7,7 @@ public class Math {
     private static final List<Equation> EQUATIONS = Arrays.asList(
         new Equation("sin(x)^2-x^2+1", "(sin(x)^2+1)^0.5", "x"),
         new Equation("x^2-e^x-3x+2", "log(x^2-3x+2)", "x"),
-        new Equation("xe^{x^2}-sin(x)^2+3cos(x)+5", "(sin(x)^2-3cos(x)-5)/e^{x^2}", "x"),
+        new Equation("-(sin(x)^2)+3*cos(x)", "(sin(x)^2-3cos(x)-5)/e^{x^2}", "x"),
         new Equation("x^3-17", "17^(1/3)", "x")
     );
 

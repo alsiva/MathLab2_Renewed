@@ -4,9 +4,9 @@ import org.example.Function;
 
 public class Equation {
 
-    private Function function;
-    private Function phiFunction;
-    private Function x;
+    private final Function function;
+    private final Function phiFunction;
+    private final Function x;
 
     public Equation(String function, String phiFunction, String x) {
         this.function = new Function(function);
