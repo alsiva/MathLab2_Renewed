@@ -46,7 +46,8 @@ public class EquationSolver {
         return new Object[][] {{x, x - prevX}, {y, y - prevY}, {iterations}};
     }
 
-    public Object[] iterationRenewed(Function function, double a, double b) {
+
+    public Object[] renewedIteration(Function function, double a, double b) {
 
         if (a > b) {
             double change = a;
@@ -54,17 +55,62 @@ public class EquationSolver {
             b = change;
         }
 
-        System.out.println("---Phi functions");
-        System.out.println("Phi(a) = " + function.apply(a));
-        System.out.println("Phi(b) = " + function.apply(b));
-        System.out.println("----------------");
-        double q = derivativeSeriesMax(function, a, b);
+        if (function.apply(a) * function.apply(b) > 0) {
+            throw new RuntimeException("Condition f(a) * f(b) < 0 is not satisfied");
+        }
+
+        double intervalSize = b - a;
+        double x;
+
+        double lambdaValue =  -1/Math.max(function.derivative(a), function.derivative(b));
+
+        double phiA = (1 + lambdaValue * function.derivative(a));
+        double phiB = (1 + lambdaValue * function.derivative(b));
+        if (Math.abs(phiA) >= 1 || Math.abs(phiB) >= 1) {
+            throw new RuntimeException("Ошибка вычисления методом простой итерации: не cходится в малой окрестности корня");
+        }
+
+        System.out.println("Phi(a) = " + phiA);
+        System.out.println("Phi(b) = " + phiB);
+
+        if (function.derivative(a) > function.derivative(b)) {
+            x = a;
+        } else {
+            x = b;
+        }
+
+        double n = 0;
+        double oldSolution = 0;
+        double currentStep = 0;
+        while (Math.abs(currentStep) > accuracy || Math.abs(function.apply(x)) > accuracy) {
+
+            oldSolution = x;
+            n++;
+            currentStep = lambdaValue * function.apply(x);
+            x +=currentStep;
+        }
+
+        return new Object[] {x, Math.abs(x - oldSolution), n};
+    }
+
+    public Object[] solveByIteration(Function function, double a, double b) {
+
+        if (a > b) {
+            double change = a;
+            a = b;
+            b = change;
+        }
 
         if (function.apply(a) * function.apply(b) > 0) {
             throw new RuntimeException("Condition f(a) * f(b) < 0 is not satisfied");
         }
 
-        double lambda =  -1/q;
+
+
+        double q = derivativeSeriesMax(function, a, b);
+        double k = (1 - q ) / q;
+        double lambda = -1 / q;
+
         double x;
         double prevX;
         double iterations = 0;
@@ -72,34 +118,36 @@ public class EquationSolver {
 
 
 
-        if (function.derivative(a, 1e-9) > function.derivative(b, 1e-9)) {
+        if (function.derivative(a) > function.derivative(b)) {
             x = a;
         } else {
             x = b;
         }
 
-
-        while (Math.abs(function.apply(x)) > accuracy) {
+        do {
             prevX = x;
             iterations += 1;
             x += lambda * function.apply(x);
             delta = x > prevX ? x - prevX : prevX - x;
-        }
+        } while (delta > accuracy * k);
 
         return new Object[] { x, delta, iterations };
 
     }
 
     private double derivativeSeriesMax(Function function, double a, double b) {
-        double max = 0, delta = (b - a) / 100000;
+        double max = -Double.MAX_VALUE, delta = (b - a) / 100000;
 
-        if (a == b) return Math.abs(function.derivative(0, 1e-9));
+
+        if (a == b) return Math.abs(function.derivative(0));
 
         for (double point = a; point <= b; point += delta) {
-            max = Math.max(max, Math.abs(function.derivative(point, 1e-9)));
+            max = Math.max(max, Math.abs(function.derivative(point)));
         }
         return max;
     }
+
+
 
     public Object[] solveByBisection(Function function, double a, double b) {
         if (a > b) {

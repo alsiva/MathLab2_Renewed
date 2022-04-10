@@ -32,7 +32,8 @@ public class Function {
     }
 
     //Find y'(derivative)
-    public double derivative(double x, double delta) {
+    public double derivative(double x) {
+        double delta = 1e-9;
         return (this.apply(x + delta) - this.apply(x - delta)) / (2 * delta);
     }
 

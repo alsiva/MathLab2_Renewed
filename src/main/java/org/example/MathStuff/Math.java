@@ -5,10 +5,10 @@ import java.util.List;
 
 public class Math {
     private static final List<Equation> EQUATIONS = Arrays.asList(
-        new Equation("sin(x)^2-x^2+1", "(sin(x)^2+1)^0.5", "x"),
-        new Equation("x^2-e^x-3x+2", "log(x^2-3x+2)", "x"),
-        new Equation("-(sin(x)^2)+3*cos(x)", "(sin(x)^2-3cos(x)-5)/e^{x^2}", "x"),
-        new Equation("x^3-17", "17^(1/3)", "x")
+        new Equation("0.5x", "(sin(x)^2+1)^0.5", "x"),
+        new Equation("cos(x)", "log(x^2-3x+2)", "x"),
+        new Equation("log(x+5) + x", "(sin(x)^2-3cos(x)-5)/e^{x^2}", "x"),
+        new Equation("-x^2 + 4", "17^(1/3)", "x")
     );
 
     private static final List<MathSystem> SYSTEMS = Arrays.asList(

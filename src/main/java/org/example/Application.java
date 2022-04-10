@@ -1,10 +1,4 @@
 package org.example;
-import javafx.fxml.FXML;
-import javafx.scene.Scene;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
-import javafx.stage.Stage;
 import org.example.MathStuff.Equation;
 import org.example.MathStuff.Math;
 import org.example.MathStuff.MathSystem;
@@ -93,7 +87,7 @@ public class Application {
 
         //Метод итераций
         System.out.println("Iteration method solution");
-        Object[] iterationResult = solver.iterationRenewed(equation.getFunction(), a, b);
+        Object[] iterationResult = solver.renewedIteration(equation.getFunction(), a, b);
         System.out.println("x = " + iterationResult[0]);
         System.out.println("Δx = " + iterationResult[1]);
         System.out.println("iters = " + iterationResult[2]);
