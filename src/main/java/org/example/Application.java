@@ -35,11 +35,18 @@ public class Application {
     }
 
     private static double readAccuracy() {
+
+        double valueDefault = 0.0001;
         while (true) {
-            System.out.println("Set accuracy in interval [0, 1]");
+            System.out.println("Set accuracy in interval [0, 1] or leave empty for default value: " + valueDefault);
 
             try {
                 String input = readFromConsole();
+
+                if (input.isBlank()) {
+                    return valueDefault;
+                }
+
                 double accuracy = Double.parseDouble(input);
 
                 if (0 <= accuracy && accuracy <= 1) {
